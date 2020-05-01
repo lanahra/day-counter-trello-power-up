@@ -4,8 +4,8 @@ function daysBetween(startDate, endDate) {
   return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
 }
 
-function createdDateOf(cardId) {
-  return new Date(1000 * parseInt(cardId.substring(0, 8), 16));
+function createdDateOf(card) {
+  return new Date(1000 * parseInt(card.id.substring(0, 8), 16));
 }
 
 function now() {
@@ -14,10 +14,10 @@ function now() {
 
 TrelloPowerUp.initialize({
   'card-badges': (t, opts) => {
-    return t.card('id').then(cardId => {
+    return t.card('id').then(card => {
       return [
         {
-          text: daysBetween(createdDateOf(cardId), now()).toString()
+          text: daysBetween(createdDateOf(card), now()).toString()
         }
       ];
     });
