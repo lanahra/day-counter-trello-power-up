@@ -5,7 +5,7 @@ function daysBetween(startDate, endDate) {
 }
 
 function createdDateOf(cardId) {
-  return new Date(1000 * parseInt(id.substring(0, 8), 16));
+  return new Date(1000 * parseInt(cardId.substring(0, 8), 16));
 }
 
 function now() {
