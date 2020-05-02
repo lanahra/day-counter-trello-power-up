@@ -76,7 +76,7 @@ TrelloPowerUp.initialize({
             callback: (t, opts) => {
               const permissions = t.getContext().permissions;
               if (permissions.card === 'write') {
-                t.set('card', 'shared', 'daysTaken', daysOpen);
+                t.set('card', 'shared', 'daysTaken', daysOpen.toString());
               }
             }
           }
