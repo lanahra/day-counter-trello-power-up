@@ -60,7 +60,8 @@ TrelloPowerUp.initialize({
             text: 'Done in ' + daysTaken + ' days',
             color: 'green',
             callback: (t, opts) => {
-              if (t.memberCanWriteToModel('card')) {
+              const permissions = t.getContext().permissions;
+              if (permissions.card === 'write') {
                 t.remove('card', 'shared', 'daysTaken');
               }
             }
@@ -70,10 +71,11 @@ TrelloPowerUp.initialize({
         return daysOpen(t).then(daysOpen => [
           {
             title: 'Day Counter',
-            text: 'Open for ' + daysOpen + ' days',
-            color: badgeColorFor(parseInt(daysOpen, 10)),
+            text: 'Open for ' + daysOpen.toString() + ' days',
+            color: badgeColorFor(daysOpen),
             callback: (t, opts) => {
-              if (t.memberCanWriteToModel('card')) {
+              const permissions = t.getContext().permissions;
+              if (permissions.card === 'write') {
                 t.set('card', 'shared', 'daysTaken', daysOpen);
               }
             }
