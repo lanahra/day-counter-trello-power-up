@@ -1,5 +1,11 @@
 /* global TrelloPowerUp */
 
+function daysOpen(t, callback) {
+  return t.card('id').then(card => {
+    return daysBetween(createdDateOf(card), now());
+  });
+}
+
 function daysBetween(startDate, endDate) {
   return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
 }
@@ -32,17 +38,48 @@ function iconFor(daysOpen) {
 
 TrelloPowerUp.initialize({
   'card-badges': (t, opts) => {
-    return t.card('id').then(card => {
-      const daysOpen = daysBetween(createdDateOf(card), now());
-      return daysOpen > 0
-        ? [
-            {
-              text: daysOpen.toString(),
-              color: badgeColorFor(daysOpen),
-              icon: iconFor(daysOpen)
+    return daysOpen(t).then(
+      daysOpen =>
+        daysOpen > 0
+          ? [
+              {
+                text: daysOpen.toString(),
+                color: badgeColorFor(daysOpen),
+                icon: iconFor(daysOpen)
+              }
+            ]
+          : []
+    );
+  },
+  'card-detail-badges': (t, opts) => {
+    return t.get('card', 'shared', 'daysTaken').then(daysTaken => {
+      if (daysTaken) {
+        return [
+          {
+            title: 'Day Counter',
+            text: 'Done in ' + daysTaken + ' days',
+            color: 'green',
+            callback: (t, opts) => {
+              if (t.memberCanWriteToModel('card')) {
+                t.remove('card', 'shared', 'daysTaken');
+              }
             }
-          ]
-        : [];
+          }
+        ];
+      } else {
+        return daysOpen(t).then(daysOpen => [
+          {
+            title: 'Day Counter',
+            text: 'Open for ' + daysOpen + ' days',
+            color: badgeColorFor(parseInt(daysOpen, 10)),
+            callback: (t, opts) => {
+              if (t.memberCanWriteToModel('card')) {
+                t.set('card', 'shared', 'daysTaken', daysOpen);
+              }
+            }
+          }
+        ]);
+      }
     });
   }
 });
