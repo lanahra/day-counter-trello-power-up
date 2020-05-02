@@ -42,7 +42,7 @@ TrelloPowerUp.initialize({
       if (daysTaken) {
         return [
           {
-            text: daysOpen.toString(),
+            text: daysTaken,
             color: 'green',
             icon: './images/calendar-white.svg'
           }
