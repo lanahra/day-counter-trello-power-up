@@ -38,18 +38,30 @@ function iconFor(daysOpen) {
 
 TrelloPowerUp.initialize({
   'card-badges': (t, opts) => {
-    return daysOpen(t).then(
-      daysOpen =>
-        daysOpen > 0
-          ? [
-              {
-                text: daysOpen.toString(),
-                color: badgeColorFor(daysOpen),
-                icon: iconFor(daysOpen)
-              }
-            ]
-          : []
-    );
+    return t.get('card', 'shared', 'daysTaken').then(daysTaken => {
+      if (daysTaken) {
+        return [
+          {
+            text: daysOpen.toString(),
+            color: 'green',
+            icon: './images/calendar-white.svg'
+          }
+        ];
+      } else {
+        return daysOpen(t).then(
+          daysOpen =>
+            daysOpen > 0
+              ? [
+                  {
+                    text: daysOpen.toString(),
+                    color: badgeColorFor(daysOpen),
+                    icon: iconFor(daysOpen)
+                  }
+                ]
+              : []
+        );
+      }
+    });
   },
   'card-detail-badges': (t, opts) => {
     return t.get('card', 'shared', 'daysTaken').then(daysTaken => {
