@@ -15,7 +15,7 @@ const ICON_WHITE = './images/calendar-white.svg';
 const ICON_GRAY = './images/calendar-gray.svg';
 const ICON_DARK = './images/calendar-dark.svg';
 
-const BASE_URL = 'https://day-counter-trello-power-up.herokuapp.com/';
+const BASE_URL = 'https://lanahra.github.io/day-counter-trello-power-up/';
 
 function cardBadges(t, opts) {
   return t.get('card', 'shared', 'daysTaken').then((daysTaken) => {
